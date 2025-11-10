@@ -1,0 +1,38 @@
+; Solution to Experiment 4,  Exercise 1 in ARM Assembly
+
+    PRESERVE8
+    THUMB
+    AREA  RESET, DATA, READONLY
+    EXPORT __Vectors
+__Vectors
+    DCD 0x20001000 
+    DCD Reset_Handler
+    ALIGN
+N DCD 7
+NUM1  DCD 3, -7, 2, -2, 10, 20, 30 
+POINTER DCD NUM1 
+SUMP    DCD SUM 
+    AREA MYDATA, DATA, READWRITE
+SUM  DCD 0
+    AREA MYCODE, CODE, READONLY
+    ENTRY
+    EXPORT Reset_Handler
+Reset_Handler
+	LDR R0,N
+	LDR R1,POINTER
+	LDR R5, SUMP
+NEXT
+	LDR R2,[R1],#4
+	CBZ R0,DONE ;COMPARE AND BRANCH ON ZERO
+	SUB R0,#1
+	CMP R2,#5
+	BLT LOOP
+	ADD R3,R3,R2
+LOOP
+	B NEXT
+DONE	
+	STR R3,[R5]
+STOP
+    B STOP
+    END  
+
